@@ -43,13 +43,19 @@ public class ListaDocesActivity extends Activity {
     ProdutoDAO dao;
 
     private List<ApplicationInfo> mAppList;
+    private List<Produto> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_lista_doces);
+
+        dao = new ProdutoDAO(getApplicationContext());
+
+
+        registros = dao.listarTodosDoces("Doce");
 
         mAppList = getPackageManager().getInstalledApplications(0);
 
@@ -101,17 +107,17 @@ public class ListaDocesActivity extends Activity {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                ApplicationInfo item = mAppList.get(position);
+                //ApplicationInfo item = mAppList.get(position);
                 switch (index) {
                     case 0:
                         // open
-                        open(item);
+                        //open(item);
                         break;
                     case 1:
                         // delete
 //					delete(item);
-                        mAppList.remove(position);
-                        mAdapter.notifyDataSetChanged();
+                        //mAppList.remove(position);
+                        //mAdapter.notifyDataSetChanged();
                         break;
                 }
                 return false;
@@ -195,12 +201,12 @@ public class ListaDocesActivity extends Activity {
 
         @Override
         public int getCount() {
-            return mAppList.size();
+            return registros.size();
         }
 
         @Override
-        public ApplicationInfo getItem(int position) {
-            return mAppList.get(position);
+        public Produto getItem(int position) {
+            return registros.get(position);
         }
 
         @Override
@@ -216,9 +222,9 @@ public class ListaDocesActivity extends Activity {
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            ApplicationInfo item = getItem(position);
-            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-            holder.tv_name.setText(item.loadLabel(getPackageManager()));
+            Produto item = getItem(position);
+            //holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
+            holder.tv_name.setText(item.getNome());
             holder.iv_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -247,9 +253,9 @@ public class ListaDocesActivity extends Activity {
 
         @Override
         public boolean getSwipEnableByPosition(int position) {
-            if(position % 2 == 0){
-                return false;
-            }
+//            if(position % 2 == 0){
+//                return false;
+//            }
             return true;
         }
     }

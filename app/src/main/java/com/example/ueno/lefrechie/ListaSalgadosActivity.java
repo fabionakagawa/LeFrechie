@@ -32,7 +32,7 @@ public class ListaSalgadosActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_doces);
+        setContentView(R.layout.activity_lista_salgado);
 
         dao = new ProdutoDAO(getApplicationContext());
 
@@ -49,7 +49,7 @@ public class ListaSalgadosActivity extends Activity {
         );
 
         List<Produto> registros = new ArrayList<>();
-        registros = dao.listarTodosDoces("Salgado");
+        registros = dao.listarTodosSalgados("Salgado");
 
         if (registros.size() == 0) {
             Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);

@@ -31,7 +31,7 @@ public class ListaBebidasActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_doces);
+        setContentView(R.layout.activity_lista_bebida);
 
         dao = new ProdutoDAO(getApplicationContext());
 
@@ -48,7 +48,7 @@ public class ListaBebidasActivity extends Activity {
         );
 
         List<Produto> registros = new ArrayList<>();
-        registros = dao.listarTodosDoces("Bebida");
+        registros = dao.listarTodasBebidas("Bebida");
 
         if(registros.size() == 0){
             Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
