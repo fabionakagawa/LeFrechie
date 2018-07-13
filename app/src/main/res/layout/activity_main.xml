@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical"
+    tools:context="com.example.ueno.lefrechie.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:paddingTop="8dp"
+        android:gravity="center"
+        android:layout_weight="6">
+
+        <ImageButton
+            android:id="@+id/logoInicial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            app:srcCompat="@drawable/logopreto"
+            android:background="#00ffffff"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="#00ffffff"
+        android:orientation="vertical"
+        android:gravity="top"
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/pedidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:background="#00ffffff"
+            android:gravity="center"
+            app:srcCompat="@drawable/pedidos"/>
+        <ImageButton
+            android:id="@+id/pedidosAberto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:background="#00ffffff"
+            android:gravity="center"
+            app:srcCompat="@drawable/pedidosemaberto"/>
+        <ImageButton
+            android:id="@+id/relatorioDiario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:background="#00ffffff"
+            android:gravity="center"
+            app:srcCompat="@drawable/relatoriodiario"/>
+        <ImageButton
+            android:id="@+id/produtos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:background="#00ffffff"
+            android:gravity="center"
+            app:srcCompat="@drawable/produtos"/>
+    </LinearLayout>
+
+
+</LinearLayout>

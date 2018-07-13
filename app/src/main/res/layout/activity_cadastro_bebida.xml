@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:paddingTop="8dp"
+        android:gravity="center"
+        android:layout_weight="8">
+
+        <ImageButton
+            android:id="@+id/logoInicial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            app:srcCompat="@drawable/logopreto"
+            android:background="#00ffffff"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:paddingTop="8dp"
+        android:gravity="center"
+        android:layout_weight="8">
+
+        <ImageView
+            android:id="@+id/texto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/bebidatexto"
+            android:background="#00ffffff"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="#00ffffff"
+        android:orientation="horizontal"
+        android:gravity="top"
+        android:layout_weight="6">
+
+        <EditText
+            android:id="@+id/nomeBebida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bebidanome"
+            android:layout_marginRight="10dp"
+            android:textColorHint="#ffffff"
+            android:textColor="#ffffff"
+            android:textAlignment="center"
+            android:hint="Nome da Bebida"
+            android:layout_weight="2"
+            />
+
+        <EditText
+            android:id="@+id/precoBebida"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColorHint="#ffffff"
+            android:textColor="#ffffff"
+            android:inputType="numberDecimal"
+            android:textAlignment="center"
+            android:background="@drawable/bebidapreco"
+            android:hint="R$"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00ffffff"
+        android:orientation="vertical"
+        android:gravity="top"
+        android:layout_weight="6">
+
+        <ImageButton
+            android:id="@+id/adicionarBebida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            app:srcCompat="@drawable/adicionardoce"
+            android:background="#00ffffff"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

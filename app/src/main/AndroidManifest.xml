@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.ueno.lefrechie">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/logopreto"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PedidosActivity" >
+        </activity>
+        <activity android:name=".BalcaoActivity" >
+        </activity>
+        <activity android:name=".ProdutoActivity" >
+        </activity>
+        <activity android:name=".CadastroSegmentoProdutoActivity" >
+        </activity>
+        <activity android:name=".CadastroDoceActivity" >
+        </activity>
+        <activity android:name=".CadastroSalgadoActivity" >
+        </activity>
+        <activity android:name=".CadastroCafeActivity" >
+        </activity>
+        <activity android:name=".CadastroBebidaActivity" >
+        </activity>
+        <activity android:name=".CadastroPetiscoActivity" >
+        </activity>
+        <activity android:name=".ListaDocesActivity" >
+        </activity>
+        <activity android:name=".ListaSalgadosActivity" >
+        </activity>
+        <activity android:name=".ListaCafesActivity" >
+        </activity>
+        <activity android:name=".ListaBebidasActivity" >
+        </activity>
+        <activity android:name=".ListaPetiscosActivity" >
+        </activity>
+    </application>
+
+</manifest>
