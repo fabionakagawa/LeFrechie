@@ -23,14 +23,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         ImageButton clickButton = (ImageButton) findViewById(R.id.pedidos);
+
+
         clickButton.setOnClickListener( new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), PedidosActivity.class);
+                Intent i = new Intent(getApplicationContext(),PedidosActivity.class);
                 startActivity(i);
             }
         });
+
 
         ImageButton clickButton5 = (ImageButton) findViewById(R.id.produtos);
         clickButton5.setOnClickListener( new View.OnClickListener() {

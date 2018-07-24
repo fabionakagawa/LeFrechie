@@ -43,6 +43,7 @@ public class ProdutoActivity extends AppCompatActivity {
                 int flag = flags_editar.getFlagCadastro();
                 Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -55,6 +56,20 @@ public class ProdutoActivity extends AppCompatActivity {
                 flags_cadastro.setFlagCadastro();
                 Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
                 startActivity(i);
+                finish();
+            }
+        });
+
+        ImageButton importarButton = (ImageButton) findViewById(R.id.importar);
+        importarButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Flags_DAO flags_cadastro = new Flags_DAO(getApplicationContext());
+                flags_cadastro.setFlagCadastro();
+                Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 

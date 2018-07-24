@@ -6,9 +6,13 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ueno.lefrechie.DAO.ProdutoDAO;
+import com.example.ueno.lefrechie.DataSource.DataSource;
 import com.example.ueno.lefrechie.Libs.BaseSwipListAdapter;
 import com.example.ueno.lefrechie.Libs.SwipeMenu;
 import com.example.ueno.lefrechie.Libs.SwipeMenuCreator;
@@ -59,7 +64,7 @@ public class ListaDocesActivity extends Activity {
 
         mAppList = getPackageManager().getInstalledApplications(0);
 
-        mListView = (SwipeMenuListView) findViewById(R.id.listView);
+        mListView = findViewById(R.id.listView);
 
         mAdapter = new AppAdapter();
         mListView.setAdapter(mAdapter);
@@ -107,17 +112,28 @@ public class ListaDocesActivity extends Activity {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                //ApplicationInfo item = mAppList.get(position);
+                ApplicationInfo item = mAppList.get(position);
                 switch (index) {
                     case 0:
-                        // open
-                        //open(item);
+                        // Edit
+                        Produto doce = mAdapter.getItem(position);
+                        Log.i("Doce 1",doce.getNome());
+                        Log.i("Doce 1",doce.getSegmento());
+                        Log.i("Doce 1",String.valueOf(doce.getPreco()));
+                        Log.i("Doce 1",String.valueOf(doce.getProdutoId_Q()));
+                        Log.i("Doce 1",String.valueOf(doce.getQuantidade()));
+                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
+                        i.putExtra("Doce", doce);
+                        startActivity(i);
                         break;
                     case 1:
                         // delete
-//					delete(item);
-                        //mAppList.remove(position);
-                        //mAdapter.notifyDataSetChanged();
+                        DataSource db = new DataSource(getApplicationContext());
+                        Produto produto = mAdapter.getItem(position);
+                        db.deleteProduto(produto.getProdutoId_Q(),produto.getSegmento());
+                        mAdapter.notifyDataSetChanged();
+                        finish();
+                        startActivity(getIntent());
                         break;
                 }
                 return false;
@@ -218,35 +234,48 @@ public class ListaDocesActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
-                        R.layout.item_list_app, null);
+                        R.layout.single_item_doce, null);
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Produto item = getItem(position);
-            //holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-            holder.tv_name.setText(item.getNome());
-            holder.iv_icon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ListaDocesActivity.this, "iv_icon_click", Toast.LENGTH_SHORT).show();
-                }
-            });
-            holder.tv_name.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(ListaDocesActivity.this,"iv_icon_click",Toast.LENGTH_SHORT).show();
-                }
-            });
+//            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
+            holder.holder_name.setText(item.getNome());
+            holder.holder_price.setText("R$ "+
+                    String.valueOf(String.format("%.2f", item.getPreco())));
+
+//            holder.holder_name.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(ListaDocesActivity.this, "iv_icon_click", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            holder.holder_price.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(ListaDocesActivity.this,"iv_icon_click",Toast.LENGTH_SHORT).show();
+//                }
+//            });
             return convertView;
         }
 
         class ViewHolder {
-            ImageView iv_icon;
-            TextView tv_name;
+            TextView holder_name;
+            TextView holder_price;
+//            ImageView iv_icon;
+//            TextView tv_name;
 
             public ViewHolder(View view) {
-                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
-                tv_name = (TextView) view.findViewById(R.id.tv_name);
+                holder_name = view.findViewById(R.id.nomeDoce);
+                holder_price = view.findViewById(R.id.precoDoce);
+//                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
+//                tv_name = (TextView) view.findViewById(R.id.tv_name);
+                holder_name.setTypeface(null, Typeface.BOLD);
+                holder_name.setTextSize(TypedValue.COMPLEX_UNIT_PX,65);
+                holder_name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                holder_price.setTypeface(null, Typeface.BOLD);
+                holder_price.setTextSize(TypedValue.COMPLEX_UNIT_PX,55);
+                holder_price.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 view.setTag(this);
             }
         }

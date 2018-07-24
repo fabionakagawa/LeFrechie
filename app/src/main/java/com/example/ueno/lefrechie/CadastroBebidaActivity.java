@@ -67,6 +67,7 @@ public class CadastroBebidaActivity extends AppCompatActivity implements Seriali
                 produtoDAO.adicionar(bebida);
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
+                finish();
                 Toast.makeText(getApplicationContext(), "Bebida Adicionado com Sucesso!",
                         Toast.LENGTH_LONG).show();
             }

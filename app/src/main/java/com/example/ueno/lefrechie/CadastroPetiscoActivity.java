@@ -67,6 +67,7 @@ public class CadastroPetiscoActivity extends AppCompatActivity implements Serial
                 produtoDAO.adicionar(petisco);
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
+                finish();
                 Toast.makeText(getApplicationContext(), "Petisco Adicionado com Sucesso!",
                         Toast.LENGTH_LONG).show();
             }

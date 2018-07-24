@@ -69,6 +69,7 @@ public class CadastroCafeActivity extends AppCompatActivity implements Serializa
                 produtoDAO.adicionar(cafe);
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
+                finish();
                 Toast.makeText(getApplicationContext(), "Café Adicionado com Sucesso!",
                         Toast.LENGTH_LONG).show();
             }

@@ -70,10 +70,12 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
                                                    Intent i = new Intent(getApplicationContext(), CadastroSalgadoActivity.class);
                                                    i.putExtra("Salgado", salgado);
                                                    startActivity(i);
+                                                   finish();
                                                }
                                                else{
                                                    Intent i = new Intent(getApplicationContext(), ListaSalgadosActivity.class);
                                                    startActivity(i);
+                                                   finish();
                                                }
                                            }
 
@@ -92,10 +94,12 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
                                                       Intent i = new Intent(getApplicationContext(), CadastroCafeActivity.class);
                                                       i.putExtra("Cafe", cafe);
                                                       startActivity(i);
+                                                      finish();
                                                   }
                                                   else{
                                                       Intent i = new Intent(getApplicationContext(), ListaCafesActivity.class);
                                                       startActivity(i);
+                                                      finish();
                                                   }
                                               }
 
@@ -115,10 +119,12 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
                                                    Intent i = new Intent(getApplicationContext(), CadastroBebidaActivity.class);
                                                    i.putExtra("Bebida", bebida);
                                                    startActivity(i);
+                                                   finish();
                                                }
                                                else{
                                                    Intent i = new Intent(getApplicationContext(), ListaBebidasActivity.class);
                                                    startActivity(i);
+                                                   finish();
                                                }
                                            }
 
@@ -137,10 +143,12 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
                                                       Intent i = new Intent(getApplicationContext(), CadastroPetiscoActivity.class);
                                                       i.putExtra("Petisco", petisco);
                                                       startActivity(i);
+                                                      finish();
                                                   }
                                                   else{
                                                       Intent i = new Intent(getApplicationContext(), ListaPetiscosActivity.class);
                                                       startActivity(i);
+                                                      finish();
                                                   }
                                               }
 

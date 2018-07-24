@@ -71,6 +71,7 @@ public class CadastroSalgadoActivity extends AppCompatActivity implements Serial
                 produtoDAO.adicionar(salgado);
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
+                finish();
                 Toast.makeText(getApplicationContext(), "Salgado Adicionado com Sucesso!",
                         Toast.LENGTH_LONG).show();
             }

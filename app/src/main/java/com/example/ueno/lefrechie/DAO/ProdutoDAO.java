@@ -29,9 +29,11 @@ public class ProdutoDAO {
         boolean retorno = false;
 
         values = new ContentValues();
+        if(obj.getProdutoId_Q() != 0){
+            values.put(Produto_DataModel.getProdutoId(),obj.getProdutoId_Q());
+        }
 
         values.put(Produto_DataModel.getProdutoNome(), obj.getNome());
-        Log.i("SegmentoDAO" , obj.getSegmento());
         values.put(Produto_DataModel.getProdutoSegmento(),obj.getSegmento());
         values.put(Produto_DataModel.getProdutoPreco(), obj.getPreco());
 
