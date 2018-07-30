@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.ueno.lefrechie.DAO.ProdutoDAO;
 import com.example.ueno.lefrechie.Model.Produto;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        ImageButton clickButton = (ImageButton) findViewById(R.id.pedidos);
+        TextView clickButton = (TextView) findViewById(R.id.pedidos);
 
 
         clickButton.setOnClickListener( new View.OnClickListener() {
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        ImageButton clickButton5 = (ImageButton) findViewById(R.id.produtos);
+        TextView clickButton5 = (TextView) findViewById(R.id.produtos);
         clickButton5.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        ImageButton RelatorioButton = (ImageButton) findViewById(R.id.relatorioDiario);
+        TextView RelatorioButton = (TextView) findViewById(R.id.relatorioDiario);
         RelatorioButton.setOnClickListener( new View.OnClickListener() {
 
             @Override

@@ -68,9 +68,21 @@ public class CadastroBebidaActivity extends AppCompatActivity implements Seriali
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
                 finish();
-                Toast.makeText(getApplicationContext(), "Bebida Adicionado com Sucesso!",
-                        Toast.LENGTH_LONG).show();
+                if(bebida.getNome() == null){
+                    Toast.makeText(getApplicationContext(), "Bebida Adicionada com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Bebida Editada com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
     }
 }

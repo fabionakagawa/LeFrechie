@@ -39,23 +39,25 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Flags_DAO flags_dao = new Flags_DAO(getApplication());
-                int flag = flags_dao.getFlagCadastro();
-                Log.i("OOOOOOOO" , Integer.toString(flag));
-                    if(flag == 1) {
-                        Produto doce = new Produto();
-                        doce.setSegmento("Doce");
-                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
-                        i.putExtra("Doce", doce);
-                        startActivity(i);
-                    }
-                    else{
-                        Intent i = new Intent(getApplicationContext(), ListaDocesActivity.class);
-                        startActivity(i);
-                        }
-                }
+                                                Flags_DAO flags_dao = new Flags_DAO(getApplication());
+                                                int flag = flags_dao.getFlagCadastro();
+                                                Log.i("OOOOOOOO" , Integer.toString(flag));
+                                                    if(flag == 1) {
+                                                        Produto doce = new Produto();
+                                                        doce.setSegmento("Doce");
+                                                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
+                                                        i.putExtra("Doce", doce);
+                                                        startActivity(i);
+                                                        finish();
+                                                    }
+                                                    else{
+                                                        Intent i = new Intent(getApplicationContext(), ListaDocesActivity.class);
+                                                        startActivity(i);
+                                                        finish();
+                                                        }
+                                                }
 
-            }
+                                            }
         );
         ImageButton salgadoButton = (ImageButton) findViewById(R.id.salgados);
         salgadoButton.setOnClickListener( new View.OnClickListener() {

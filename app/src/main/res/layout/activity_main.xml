@@ -39,38 +39,66 @@
         android:gravity="top"
         android:layout_weight="1">
 
-        <ImageButton
+        <TextView
             android:id="@+id/pedidos"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:background="#00ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:gravity="center"
-            app:srcCompat="@drawable/pedidos"/>
-        <ImageButton
+            android:text="Pedidos"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:fontFamily="@font/calibri"
+            android:textSize="@dimen/font_size"
+            android:textColor= "@color/White"
+            android:background="@drawable/main"/>
+        <TextView
             android:id="@+id/pedidosAberto"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:background="#00ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:gravity="center"
-            app:srcCompat="@drawable/pedidosemaberto"/>
-        <ImageButton
+            android:text="Pedidos em Aberto"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:fontFamily="@font/calibri"
+            android:textSize="@dimen/font_size"
+            android:textColor= "@color/White"
+            android:background="@drawable/main"/>
+        <TextView
             android:id="@+id/relatorioDiario"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:background="#00ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:gravity="center"
-            app:srcCompat="@drawable/relatoriodiario"/>
-        <ImageButton
+            android:text="Relatório Diário"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:fontFamily="@font/calibri"
+            android:textSize="@dimen/font_size"
+            android:textColor= "@color/White"
+            android:background="@drawable/main"/>
+        <TextView
             android:id="@+id/produtos"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="8dp"
-            android:background="#00ffffff"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:gravity="center"
-            app:srcCompat="@drawable/produtos"/>
+            android:text="Produtos"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:fontFamily="@font/calibri"
+            android:textSize="@dimen/font_size"
+            android:textColor= "@color/White"
+            android:background="@drawable/main"/>
     </LinearLayout>
 
 

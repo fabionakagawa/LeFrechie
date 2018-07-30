@@ -83,7 +83,7 @@ public class ListaDocesActivity extends Activity {
                 // set item width
                 openItem.setWidth(dp2px(90));
                 // set item title
-                openItem.setTitle("Open");
+                openItem.setTitle("Editar");
                 // set item title fontsize
                 openItem.setTitleSize(18);
                 // set item title font color
@@ -117,11 +117,6 @@ public class ListaDocesActivity extends Activity {
                     case 0:
                         // Edit
                         Produto doce = mAdapter.getItem(position);
-                        Log.i("Doce 1",doce.getNome());
-                        Log.i("Doce 1",doce.getSegmento());
-                        Log.i("Doce 1",String.valueOf(doce.getPreco()));
-                        Log.i("Doce 1",String.valueOf(doce.getProdutoId_Q()));
-                        Log.i("Doce 1",String.valueOf(doce.getQuantidade()));
                         Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
                         i.putExtra("Doce", doce);
                         startActivity(i);
@@ -134,7 +129,10 @@ public class ListaDocesActivity extends Activity {
                         mAdapter.notifyDataSetChanged();
                         finish();
                         startActivity(getIntent());
+                        Toast.makeText(getApplicationContext(), "Doce Deletado com Sucesso!",
+                                Toast.LENGTH_LONG).show();
                         break;
+
                 }
                 return false;
             }
@@ -314,5 +312,11 @@ public class ListaDocesActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
     }
 }

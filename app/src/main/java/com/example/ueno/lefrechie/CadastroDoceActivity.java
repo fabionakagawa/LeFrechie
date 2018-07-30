@@ -48,10 +48,6 @@ public class CadastroDoceActivity extends AppCompatActivity implements Serializa
         final EditText docePreco = (EditText) findViewById(R.id.precoDoce);
         ((EditText)findViewById(R.id.precoDoce)).setInputType(type);
         ImageButton adicionarDoce = (ImageButton) findViewById(R.id.adicionarDoce);
-
-        if(doce.getNome() != null){
-            adicionarDoce.setBackgroundResource(R.drawable.editar);
-        }
         adicionarDoce.setOnClickListener( new View.OnClickListener() {
 
             @Override
@@ -89,5 +85,11 @@ public class CadastroDoceActivity extends AppCompatActivity implements Serializa
 
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
     }
 }

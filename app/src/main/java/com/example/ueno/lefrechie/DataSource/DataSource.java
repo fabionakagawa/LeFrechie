@@ -65,9 +65,6 @@ public class DataSource extends SQLiteOpenHelper {
                 && values.getAsInteger(idString) != 0 && cursor.getCount()>0) {
             Integer id = values.getAsInteger(idString);
             db.update(tabela, values, idString+" = " + id, null);
-            Log.i("Update ID",String.valueOf(id));
-            Log.i("Update String",values.toString());
-            Log.i("Update","CHEGUEEEEEEEEEEEEEEI");
         } else {
             Log.i("Insert","CHEGUEEEEEEEEEEEEEEI");
             db.insert(tabela, null, values);
@@ -112,7 +109,6 @@ public class DataSource extends SQLiteOpenHelper {
     }
 
     public void deleteProduto(int produtoId, String produtoSegmento) {
-        Log.i("Update",Produto_DataModel.getProdutoId() + " = " + produtoId);
         db.delete(Produto_DataModel.getProdutoTable(), Produto_DataModel.getProdutoId() + " = " + produtoId , null);
         Log.i("Update","Produto Deletado com Sucesso");
     }

@@ -66,13 +66,41 @@ public class CadastroCafeActivity extends AppCompatActivity implements Serializa
                 double n2Var = Double.parseDouble(cafePreco.getText().toString());
                 cafe.setPreco(n2Var);
                 ProdutoDAO produtoDAO = new ProdutoDAO(getApplicationContext());
+
+
                 produtoDAO.adicionar(cafe);
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
                 finish();
-                Toast.makeText(getApplicationContext(), "Café Adicionado com Sucesso!",
-                        Toast.LENGTH_LONG).show();
+                if(cafe.getNome() == null){
+                    Toast.makeText(getApplicationContext(), "Café Adicionado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Café Editado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

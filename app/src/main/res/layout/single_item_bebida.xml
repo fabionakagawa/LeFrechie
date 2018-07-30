@@ -12,7 +12,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@+id/nomeDoce"
+        android:id="@+id/nomeBebida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/bebidanome"
@@ -25,7 +25,7 @@
         />
 
     <TextView
-        android:id="@+id/precoDoce"
+        android:id="@+id/precoBebida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColorHint="#ffffff"

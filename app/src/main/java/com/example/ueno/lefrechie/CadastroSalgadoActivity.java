@@ -72,9 +72,21 @@ public class CadastroSalgadoActivity extends AppCompatActivity implements Serial
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
                 finish();
-                Toast.makeText(getApplicationContext(), "Salgado Adicionado com Sucesso!",
-                        Toast.LENGTH_LONG).show();
+                if(salgado.getNome() == null){
+                    Toast.makeText(getApplicationContext(), "Salgado Adicionado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Salgado Editado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
     }
 }

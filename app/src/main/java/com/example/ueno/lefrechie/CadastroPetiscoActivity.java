@@ -68,9 +68,21 @@ public class CadastroPetiscoActivity extends AppCompatActivity implements Serial
                 Intent i = new Intent(getApplicationContext(), ProdutoActivity.class);
                 startActivity(i);
                 finish();
-                Toast.makeText(getApplicationContext(), "Petisco Adicionado com Sucesso!",
-                        Toast.LENGTH_LONG).show();
+                if(petisco.getNome() == null){
+                    Toast.makeText(getApplicationContext(), "Petisco Adicionado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Petisco Editado com Sucesso!",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
+    }
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        startActivity(i);
+        finish();
     }
 }
