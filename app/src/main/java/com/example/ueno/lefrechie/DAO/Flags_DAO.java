@@ -40,12 +40,41 @@ public class Flags_DAO {
 
         }
     }
+
+    public void setFlagAdicionarLista(){
+        values = new ContentValues();
+        values.put(Flags_DataModel.getFlagId(),1);
+        values.put(Flags_DataModel.getFlagCadastro(),2);
+        try {
+            ds.persist(values, Flags_DataModel.getFlagTable(),Flags_DataModel.getFlagId());
+        }catch (Exception e){
+
+        }
+    }
+
+    public void setFlagIdPedido(int id){
+        values = new ContentValues();
+        values.put(Flags_DataModel.getFlagId(),1);
+        values.put(Flags_DataModel.getFlagIdpedido(),id);
+        try {
+            ds.persist(values, Flags_DataModel.getFlagTable(),Flags_DataModel.getFlagId());
+        }catch (Exception e){
+
+        }
+    }
+
     public int getFlagCadastro(){
         Cursor cursor = ds.find(Flags_DataModel.getFlagTable(),
                 null, null, null, null, null, null, null);
         cursor.moveToFirst();
         int flag = cursor.getInt(cursor.getColumnIndex(Flags_DataModel.getFlagCadastro()));
         return flag;
-
+    }
+    public int getFlagIdPdedido(){
+        Cursor cursor = ds.find(Flags_DataModel.getFlagTable(),
+                null, null, null, null, null, null, null);
+        cursor.moveToFirst();
+        int flag = cursor.getInt(cursor.getColumnIndex(Flags_DataModel.getFlagIdpedido()));
+        return flag;
     }
 }

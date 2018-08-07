@@ -2,7 +2,6 @@ package com.example.ueno.lefrechie;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
@@ -35,22 +34,17 @@ import com.example.ueno.lefrechie.Model.ListaProdutos;
 import com.example.ueno.lefrechie.Model.Pedido;
 import com.example.ueno.lefrechie.Model.Produto;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Ueno on 3/13/2018.
- */
+public class RelatorioDiarioActivity extends Activity {
 
-public class ListaDocesActivity extends Activity {
-
-    ProdutoDAO dao;
+    Pedido_DAO dao;
 
     private List<ApplicationInfo> mAppList;
-    private List<Produto> registros = new ArrayList<>();
+    private List<Pedido> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
     private int flagSelected;
@@ -68,7 +62,6 @@ public class ListaDocesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_doces);
 
-        dao = new ProdutoDAO(getApplicationContext());
         pedidoDao = new Pedido_DAO(getApplicationContext());
         listaDao = new Lista_DAO(getApplicationContext());
         flagsDao = new Flags_DAO(getApplicationContext());
@@ -83,7 +76,7 @@ public class ListaDocesActivity extends Activity {
             }
         };
 
-        registros = dao.listarTodosDoces("Doce");
+        registros = pedidoDao.getListaPedidos();
 
         mAppList = getPackageManager().getInstalledApplications(0);
 
@@ -139,23 +132,9 @@ public class ListaDocesActivity extends Activity {
                 switch (index) {
                     case 0:
                         // Edit
-                        produtoDoce = mAdapter.getItem(position);
-                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
-                        i.putExtra("Doce", produtoDoce);
-                        startActivity(i);
                         break;
                     case 1:
                         // delete
-                        DataSource db = new DataSource(getApplicationContext());
-                        produtoDoce = mAdapter.getItem(position);
-                        db.deleteProduto(produtoDoce.getProdutoId_Q(),produtoDoce.getSegmento());
-                        registros.clear();
-                        registros = dao.listarTodosDoces("Doce");
-                        mAdapter = new AppAdapter();
-                        mListView.setAdapter(mAdapter);
-                        runOnUiThread(run);
-                        Toast.makeText(getApplicationContext(), "Doce Deletado com Sucesso!",
-                                Toast.LENGTH_LONG).show();
                         break;
 
                 }
@@ -197,42 +176,10 @@ public class ListaDocesActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                produtoDoce = mAdapter.getItem(position);
-                Toast.makeText(getApplicationContext(), produtoDoce.getNome() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
+                pedido = mAdapter.getItem(position);
+                Toast.makeText(getApplicationContext(), pedido.getPedidoId_Q() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
                 Log.i("XXXXXXXXX" , "SCHEGOOOOOO1");
-                if(flagsDao.getFlagCadastro() == 2){
-                    SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
-                    Date data = new Date();
-                    String dataFormatada = formataData.format(data);
-                    SimpleDateFormat formataHora = new SimpleDateFormat("hh:mm:ss");
-                    String horaFormatada = formataHora.format(data);
 
-
-                    int idPedido = flagsDao.getFlagIdPdedido();
-                    Log.i("idPedido" , String.valueOf(idPedido));
-                    pedido.setPedidoId_Q(idPedido);
-                    pedido.setDate(dataFormatada);
-                    Log.i("dataPedido" , dataFormatada);
-                    pedido.setHora(horaFormatada);
-                    Log.i("horaPedido" , horaFormatada);
-                    pedidoDao.adicionar(pedido);
-                    listaProdutos.setLista_PedidoId(idPedido);
-                    Log.i("ListaProdNome1" , produtoDoce.getNome());
-                    listaProdutos.setListaProdutoNome(produtoDoce.getNome());
-                    Log.i("ListaProdNome2" , produtoDoce.getNome());
-                    listaProdutos.setLista_PedidoId(produtoDoce.getProdutoId_Q());
-                    listaProdutos.setListaProdutoQuantidade(1);
-                    listaProdutos.setListaData(dataFormatada);
-                    Log.i("ListaProdNome" , "CHEGOOOOUXXXYYYZZ");
-                    listaDao.adicionarItem(listaProdutos);
-                    Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
-                    startActivity(i);
-                    finish();
-
-                }
-
-                mAdapter.getView(position,view,parent);
-                runOnUiThread(run);
                 return false;
             }
         });
@@ -279,7 +226,7 @@ public class ListaDocesActivity extends Activity {
         }
 
         @Override
-        public Produto getItem(int position) {
+        public Pedido getItem(int position) {
             return registros.get(position);
         }
 
@@ -293,68 +240,43 @@ public class ListaDocesActivity extends Activity {
 
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
-                        R.layout.single_item_doce, null);
-
-                String string2 = String.valueOf(convertView.getTag());
-                Log.i("XXXXXXXXX" , "PRIMEIRA VEZ");
-
+                        R.layout.single_item_relatorio, null);
                 new ViewHolder(convertView);
-            }
-            else{
-                if (convertView.getTag() == "Selecionado"){
-                    Log.i("XXXXXXXXX" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce, null);
-                            new ViewHolder(convertView);
-                }
-                else {
-                    Log.i("YYYYYYYY" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce_selecionado, null);
-                            new ViewHolder(convertView);
-                }
             }
 
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            Produto item = getItem(position);
-//            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-            holder.holder_name.setText(item.getNome());
-            holder.holder_price.setText("R$ "+
-                    String.valueOf(String.format("%.2f", item.getPreco())));
+            Pedido item = getItem(position);
+            Log.i("1111" , String.valueOf(item.getPedidoId_Q()));
+            Log.i("1111" , String.valueOf(item.getDate()));
+            Log.i("1111" , String.valueOf(item.getHora()));
 
-//            holder.holder_name.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(ListaDocesActivity.this, "iv_icon_click", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            holder.holder_price.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Toast.makeText(ListaDocesActivity.this,"iv_icon_click",Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            holder.holder_id.setText(String.valueOf(item.getPedidoId_Q()));
+            holder.holder_data.setText(String.valueOf(item.getDate()));
+            holder.holder_hora.setText(String.valueOf(item.getHora()));
+
             return convertView;
         }
 
 
         class ViewHolder {
-            TextView holder_name;
-            TextView holder_price;
-//            ImageView iv_icon;
-//            TextView tv_name;
+            TextView holder_id;
+            TextView holder_data;
+            TextView holder_hora;
+
 
             public ViewHolder(View view) {
-                holder_name = view.findViewById(R.id.nomeDoce);
-                holder_price = view.findViewById(R.id.precoDoce);
-//                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
-//                tv_name = (TextView) view.findViewById(R.id.tv_name);
-                holder_name.setTypeface(null, Typeface.BOLD);
-                holder_name.setTextSize(TypedValue.COMPLEX_UNIT_PX,65);
-                holder_name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                holder_price.setTypeface(null, Typeface.BOLD);
-                holder_price.setTextSize(TypedValue.COMPLEX_UNIT_PX,55);
-                holder_price.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                holder_id = view.findViewById(R.id.idRelatorio);
+                holder_data = view.findViewById(R.id.dataRelatorio);
+                holder_hora = view.findViewById(R.id.horaRelatorio);
+                holder_id.setTypeface(null, Typeface.BOLD);
+                holder_id.setTextSize(TypedValue.COMPLEX_UNIT_PX,65);
+                holder_id.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                holder_data.setTypeface(null, Typeface.BOLD);
+                holder_data.setTextSize(TypedValue.COMPLEX_UNIT_PX,55);
+                holder_data.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                holder_hora.setTypeface(null, Typeface.BOLD);
+                holder_hora.setTextSize(TypedValue.COMPLEX_UNIT_PX,55);
+                holder_hora.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 view.setTag(this);
             }
         }
@@ -396,13 +318,13 @@ public class ListaDocesActivity extends Activity {
     }
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
     }
     @Override
     public void onResume() {
-        ListaDocesActivity.this.runOnUiThread(new Runnable() {
+        RelatorioDiarioActivity.this.runOnUiThread(new Runnable() {
 
             @Override
             public void run() {

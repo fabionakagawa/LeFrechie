@@ -17,10 +17,14 @@ import com.example.ueno.lefrechie.Model.Produto;
 
 public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
+    Flags_DAO flags_dao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_segmento_produto);
+
+        flags_dao = new Flags_DAO(getApplicationContext());
 
         ImageButton logoButton = (ImageButton) findViewById(R.id.logoInicial);
         logoButton.setOnClickListener( new View.OnClickListener() {
@@ -39,7 +43,6 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                                                Flags_DAO flags_dao = new Flags_DAO(getApplication());
                                                 int flag = flags_dao.getFlagCadastro();
                                                 Log.i("OOOOOOOO" , Integer.toString(flag));
                                                     if(flag == 1) {
@@ -64,7 +67,6 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
                                            @Override
                                            public void onClick(View v) {
-                                               Flags_DAO flags_dao = new Flags_DAO(getApplication());
                                                int flag = flags_dao.getFlagCadastro();
                                                if(flag == 1) {
                                                    Produto salgado = new Produto();
@@ -88,7 +90,6 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
                                               @Override
                                               public void onClick(View v) {
-                                                  Flags_DAO flags_dao = new Flags_DAO(getApplication());
                                                   int flag = flags_dao.getFlagCadastro();
                                                   if(flag == 1) {
                                                       Produto cafe = new Produto();
@@ -113,7 +114,6 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
                                            @Override
                                            public void onClick(View v) {
-                                               Flags_DAO flags_dao = new Flags_DAO(getApplication());
                                                int flag = flags_dao.getFlagCadastro();
                                                if(flag == 1) {
                                                    Produto bebida = new Produto();
@@ -137,7 +137,6 @@ public class CadastroSegmentoProdutoActivity extends AppCompatActivity {
 
                                               @Override
                                               public void onClick(View v) {
-                                                  Flags_DAO flags_dao = new Flags_DAO(getApplication());
                                                   int flag = flags_dao.getFlagCadastro();
                                                   if(flag == 1) {
                                                       Produto petisco = new Produto();

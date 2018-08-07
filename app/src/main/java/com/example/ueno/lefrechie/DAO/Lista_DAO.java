@@ -3,6 +3,8 @@ package com.example.ueno.lefrechie.DAO;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.ueno.lefrechie.DataModel.Lista_DataModel;
 import com.example.ueno.lefrechie.DataModel.Pedido_DataModel;
@@ -26,178 +28,84 @@ public class Lista_DAO {
         ds = new com.example.ueno.lefrechie.DataSource.DataSource(context);
     }
 
-    public boolean adicionar(ListaProdutos obj) {
+
+        public boolean adicionarItemZero(){
+            boolean retorno = false;
+
+            values = new ContentValues();
+
+            Cursor cursor = ds.find(Lista_DataModel.getListaTable(),
+                    null, null,null,null,null,null,null);
+            cursor.moveToFirst();
+            values.put(Lista_DataModel.getLista_ID(),0);
+            try {
+                ds.persist(values, Lista_DataModel.getListaTable(), Lista_DataModel.getLista_ID());
+                retorno = true;
+            } catch (Exception e) {
+
+            }
+        return retorno;
+        }
+
+        public boolean adicionarItem(ListaProdutos obj) {
 
 
         boolean retorno = false;
-        int i,Total = 0 ;
-        List<Integer> ProdutosId = null;
-        List<Integer> ValorUnitario = null;
-        List<Integer> Quantidade = null;
-        ProdutoDAO produtoDAO;
-        Produto produto;
 
         values = new ContentValues();
 
-        values.put(Lista_DataModel.getLista_ID(), obj.getListaId_Q());
-        int size = obj.getProdutos().size();
-        values.put(Lista_DataModel.getLista_TAMANHO(),size);
-
-        for (i=0;i<size; i++)
-        {
-           ProdutosId.add(obj.getProdutos().get(i).getProdutoId_Q());
-           Quantidade.add(obj.getProdutos().get(i).getQuantidade());
-        };
-
-        for(int x = 0; x<size; x++){
-            Cursor cursor = ds.find(Produto_DataModel.getProdutoTable(),
-                    null, Produto_DataModel.getProdutoId()+" = '"+ProdutosId.get(x)+"'",null,null,null,null,null);
+            Cursor cursor = ds.find(Lista_DataModel.getListaTable(),
+                    null, Lista_DataModel.getListaPedidoId()+ " = "+obj.getLista_PedidoId(),null,null,null,Lista_DataModel.getLista_ID(),null);
 
             cursor.moveToFirst();
-            ValorUnitario.set(x,cursor.getInt(cursor.getColumnIndex(Produto_DataModel.getProdutoPreco())));
-            Total = ValorUnitario.get(x)*Quantidade.get(x);
-        }
-        values.put(Lista_DataModel.getListaTotal(), Total);
-
-        if(i>9){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto6(), obj.getProdutos().get(5).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade6(), obj.getProdutos().get(5).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto7(), obj.getProdutos().get(6).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade7(), obj.getProdutos().get(6).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto8(), obj.getProdutos().get(7).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade8(), obj.getProdutos().get(7).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto9(), obj.getProdutos().get(8).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade9(), obj.getProdutos().get(8).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto10(), obj.getProdutos().get(9).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade10(), obj.getProdutos().get(9).getQuantidade());
-        }
-        if(i>8){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto6(), obj.getProdutos().get(5).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade6(), obj.getProdutos().get(5).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto7(), obj.getProdutos().get(6).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade7(), obj.getProdutos().get(6).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto8(), obj.getProdutos().get(7).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade8(), obj.getProdutos().get(7).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto9(), obj.getProdutos().get(8).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade9(), obj.getProdutos().get(8).getQuantidade());
-        }
-        if(i>7){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto6(), obj.getProdutos().get(5).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade6(), obj.getProdutos().get(5).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto7(), obj.getProdutos().get(6).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade7(), obj.getProdutos().get(6).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto8(), obj.getProdutos().get(7).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade8(), obj.getProdutos().get(7).getQuantidade());
-        }
-        if (i > 6) {
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto6(), obj.getProdutos().get(5).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade6(), obj.getProdutos().get(5).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto7(), obj.getProdutos().get(6).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade7(), obj.getProdutos().get(6).getQuantidade());
-        }
-        if(i>5){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto6(), obj.getProdutos().get(5).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade6(), obj.getProdutos().get(5).getQuantidade());
-        }
-        if(i>4){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto5(), obj.getProdutos().get(4).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade5(), obj.getProdutos().get(4).getQuantidade());
-        }
-        if(i>3){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto4(), obj.getProdutos().get(3).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade4(), obj.getProdutos().get(3).getQuantidade());
-        }
-
-        if(i>2){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto3(), obj.getProdutos().get(2).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade3(), obj.getProdutos().get(2).getQuantidade());
-        }
-        if(i>1){
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-            values.put(Lista_DataModel.getListaProduto2(), obj.getProdutos().get(1).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade2(), obj.getProdutos().get(1).getQuantidade());
-        }
-        else{
-            values.put(Lista_DataModel.getListaProduto1(), obj.getProdutos().get(0).getProdutoId_Q());
-            values.put(Lista_DataModel.getListaQuantidade1(), obj.getProdutos().get(0).getQuantidade());
-        }
-
+            if (cursor.getCount()<=0) {
+                Log.i("ListaProdNome" , "MENOR ZERO - ENTROU");
+                values.put(Lista_DataModel.getListaPedidoId(),obj.getLista_PedidoId());
+                Log.i("ListaProdNome" , "ID ADD");
+                values.put(Lista_DataModel.getListaProdutoId(),obj.getListaProdutoId());
+                Log.i("ListaProdNome" , "PROD ID ADD");
+                values.put(Lista_DataModel.getListaProdutoNome(),obj.getListaProdutoNome());
+                Log.i("ListaProdNome" , "PROD NOME ADD");
+                values.put(Lista_DataModel.getListaProdutoQuantidade(),obj.getListaProdutoQuantidade());
+            }
+            else{
+                values.put(Lista_DataModel.getListaPedidoId(),obj.getLista_PedidoId());
+                values.put(Lista_DataModel.getListaProdutoId(),obj.getListaProdutoId());
+                values.put(Lista_DataModel.getListaProdutoNome(),obj.getListaProdutoNome());
+                values.put(Lista_DataModel.getListaProdutoQuantidade(),Lista_DataModel.getListaProdutoQuantidade()+ obj.getListaProdutoQuantidade());
+            }
         try {
             ds.persist(values, Lista_DataModel.getListaTable(), Lista_DataModel.getLista_ID());
             retorno = true;
         } catch (Exception e) {
 
         }
-
         return retorno;
+    }
+
+    public List<Produto> listaProdutos(int idPedido){
+        List<Produto> lista = new ArrayList<>();
+        Produto produto = new Produto();
+        values = new ContentValues();
+
+        Log.i("ZZZZZZZZ" , "CHWGOOOOOOOOOOOOOOOOOOOOOOOOOUZZZZZZZ");
+
+        Cursor cursor = ds.find(Lista_DataModel.getListaTable(),
+                null, Lista_DataModel.getLista_ID()+ " = "+ idPedido,null,null,null,null ,null);
+        Log.i("KKKKKK" , "CHWGOOOOOOOOOOOOOOOOOOOOOOOOOUZZZZZZZ");
+        if(cursor.getCount()>0) {
+        cursor.moveToFirst();
+            Log.i("JJJJJJJJJ" , "CHWGOOOOOOOOOOOOOOOOOOOOOOOOOUZZZZZZZ");
+            for (int i = 0;i<cursor.getCount();i++) {
+                produto.setProdutoId_Q(cursor.getInt(cursor.getColumnIndex(Lista_DataModel.getListaPedidoId())));
+                Log.i("LLLLLLLLL" , "CHWGOOOOOOOOOOOOOOOOOOOOOOOOOUZZZZZZZ");
+                produto.setNome(cursor.getString(cursor.getColumnIndex(Lista_DataModel.getListaProdutoNome())));
+                produto.setQuantidade(cursor.getInt(cursor.getColumnIndex(Lista_DataModel.getListaProdutoQuantidade())));
+                lista.add(produto);
+                cursor.moveToNext();
+            }
+        }
+
+        return lista;
     }
 }

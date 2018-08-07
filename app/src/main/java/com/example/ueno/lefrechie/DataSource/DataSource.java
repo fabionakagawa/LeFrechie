@@ -40,6 +40,10 @@ public class DataSource extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
         onCreate(db);
     }
+
+    public void deletePedidoTable(){
+        db.delete(Pedido_DataModel.getPedidoTable(),null,null);
+    }
     public void deleteTables(){
         db.delete(Produto_DataModel.getProdutoTable(),null,null);
         db.delete(Pedido_DataModel.getPedidoTable(),null,null);

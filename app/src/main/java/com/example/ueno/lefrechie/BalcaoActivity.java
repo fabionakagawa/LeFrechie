@@ -14,7 +14,7 @@ public class BalcaoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_balcao);
+        setContentView(R.layout.activity_pedido);
 
         ImageButton logoButton = (ImageButton) findViewById(R.id.logoInicial);
         logoButton.setOnClickListener( new View.OnClickListener() {

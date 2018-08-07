@@ -99,6 +99,7 @@
             android:textSize="@dimen/font_size"
             android:textColor= "@color/White"
             android:background="@drawable/main"/>
+
     </LinearLayout>
 
 

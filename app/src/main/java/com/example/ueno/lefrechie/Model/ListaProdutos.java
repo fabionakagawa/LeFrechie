@@ -9,9 +9,14 @@ import java.util.List;
 public class ListaProdutos {
 
     private int ListaId_Q;
+    private int Lista_PedidoId;
     private int ListaTamanho;
-    private List<Produto> produtos;
+    private int ListaProdutoId;
+    private String ListaProdutoNome;
+    private int ListaProdutoQuantidade;
+    private String ListaData;
     private int Total;
+
 
     public int getTotal() {
         return Total;
@@ -29,19 +34,51 @@ public class ListaProdutos {
         ListaId_Q = listaId_Q;
     }
 
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
-
     public int getListaTamanho() {
         return ListaTamanho;
     }
 
     public void setListaTamanho(int listaTamanho) {
         ListaTamanho = listaTamanho;
+    }
+
+    public String getListaData() {
+        return ListaData;
+    }
+
+    public void setListaData(String listaData) {
+        ListaData = listaData;
+    }
+
+    public int getListaProdutoId() {
+        return ListaProdutoId;
+    }
+
+    public void setListaProdutoId(int listaProdutoId) {
+        ListaProdutoId = listaProdutoId;
+    }
+
+    public String getListaProdutoNome() {
+        return ListaProdutoNome;
+    }
+
+    public void setListaProdutoNome(String listaProdutoNome) {
+        ListaProdutoNome = listaProdutoNome;
+    }
+
+    public int getListaProdutoQuantidade() {
+        return ListaProdutoQuantidade;
+    }
+
+    public void setListaProdutoQuantidade(int listaProdutoQuantidade) {
+        ListaProdutoQuantidade = listaProdutoQuantidade;
+    }
+
+    public int getLista_PedidoId() {
+        return Lista_PedidoId;
+    }
+
+    public void setLista_PedidoId(int lista_PedidoId) {
+        Lista_PedidoId = lista_PedidoId;
     }
 }

@@ -11,7 +11,6 @@ public class Pedido_DataModel {
     static final String PEDIDO_BALCAO= "PedidoBalcao";
     static final String PEDIDO_DATA = "PedidoData";
     static final String PEDIDO_HORA = "PedidoHora";
-    static final String PEDIDO_LISTA = "PedidoLista";
 
 
     public static final String createOrderTable(){
@@ -20,13 +19,12 @@ public class Pedido_DataModel {
                 + PEDIDO_MESA + " int,"
                 + PEDIDO_BALCAO + " int,"
                 + PEDIDO_DATA + " text,"
-                + PEDIDO_HORA + " text,"
-                + PEDIDO_LISTA + " int"
+                + PEDIDO_HORA + " text"
                 +")";
         return query;
     }
 
-    public static final String dropOrderTable(){
+    public static final String dropPedidoTable(){
         String query = "DROP TABLE IF EXISTS "+ PEDIDO_TABLE;
         return query;
     }
@@ -55,7 +53,4 @@ public class Pedido_DataModel {
         return PEDIDO_HORA;
     }
 
-    public static String getPedidoLista() {
-        return PEDIDO_LISTA;
-    }
 }

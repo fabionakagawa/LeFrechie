@@ -1,5 +1,7 @@
 package com.example.ueno.lefrechie.Model;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +16,6 @@ public class Pedido implements Serializable {
     private int balcao;
     private String Data;
     private String Hora;
-    private ListaProdutos listaProdutos;
     private int status;
     private int totalPedido;
 
@@ -42,8 +43,12 @@ public class Pedido implements Serializable {
         this.mesaId_Q = mesaId_Q;
     }
 
-    public void setData(String data) {
-        Data = data;
+    public String getDate() {
+        return Data;
+    }
+
+    public void setDate(String data) {
+        this.Data = data;
     }
 
     public void setHora(String hora) {
@@ -63,9 +68,6 @@ public class Pedido implements Serializable {
         return mesaId_Q;
     }
 
-    public String getData() {
-        return Data;
-    }
 
     public String getHora() {
         return Hora;
@@ -75,11 +77,4 @@ public class Pedido implements Serializable {
         return totalPedido;
     }
 
-    public ListaProdutos getListaProdutos() {
-        return listaProdutos;
-    }
-
-    public void setListaProdutos(ListaProdutos listaProdutos) {
-        this.listaProdutos = listaProdutos;
-    }
 }

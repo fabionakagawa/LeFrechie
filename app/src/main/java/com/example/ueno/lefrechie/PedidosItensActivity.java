@@ -2,7 +2,6 @@ package com.example.ueno.lefrechie;
 
 import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
@@ -18,13 +17,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ueno.lefrechie.DAO.Flags_DAO;
 import com.example.ueno.lefrechie.DAO.Lista_DAO;
 import com.example.ueno.lefrechie.DAO.Pedido_DAO;
-import com.example.ueno.lefrechie.DAO.ProdutoDAO;
+import com.example.ueno.lefrechie.DataModel.Lista_DataModel;
+import com.example.ueno.lefrechie.DataModel.Pedido_DataModel;
 import com.example.ueno.lefrechie.DataSource.DataSource;
 import com.example.ueno.lefrechie.Libs.BaseSwipListAdapter;
 import com.example.ueno.lefrechie.Libs.SwipeMenu;
@@ -35,64 +36,90 @@ import com.example.ueno.lefrechie.Model.ListaProdutos;
 import com.example.ueno.lefrechie.Model.Pedido;
 import com.example.ueno.lefrechie.Model.Produto;
 
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Ueno on 3/13/2018.
- */
+public class PedidosItensActivity extends Activity {
 
-public class ListaDocesActivity extends Activity {
-
-    ProdutoDAO dao;
-
+    Pedido pedido = new Pedido();
+    Pedido_DAO pedidoDao;
+    Flags_DAO flagsDao;
+    Lista_DAO listaDao;
+    Lista_DataModel listaDataModel =new Lista_DataModel();
+    ListaProdutos listaProdutos = new ListaProdutos();
+    String dataFormatada;
+    int id;
     private List<ApplicationInfo> mAppList;
     private List<Produto> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
-    private int flagSelected;
-    private Produto produtoDoce;
-    private Pedido pedido;
-    private Pedido_DAO pedidoDao;
-    private Flags_DAO flagsDao;
-    private ListaProdutos listaProdutos;
-    private Lista_DAO listaDao;
-    Runnable run;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_doces);
+        setContentView(R.layout.activity_pedidos_items);
 
-        dao = new ProdutoDAO(getApplicationContext());
-        pedidoDao = new Pedido_DAO(getApplicationContext());
-        listaDao = new Lista_DAO(getApplicationContext());
+
         flagsDao = new Flags_DAO(getApplicationContext());
-        pedido = new Pedido();
-        listaProdutos = new ListaProdutos();
+        pedidoDao = new Pedido_DAO(getApplicationContext());
 
-        run = new Runnable() {
-            public void run() {
-                //reload content
 
-                mAdapter.notifyDataSetChanged();
+        if(flagsDao.getFlagIdPdedido()>0){
+            Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagIdPdedido()));
+            id=flagsDao.getFlagIdPdedido();
+        }
+        else{
+
+            SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+            Date data = new Date();
+            dataFormatada = formataData.format(data);
+            pedido.setDate(dataFormatada);
+            Log.i("AQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
+            id = pedidoDao.getLastOrderId(dataFormatada);
+            Log.i("DEPOISAQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
+            Log.i("DEPOISAQUIAQUI", String.valueOf(id));
+        }
+
+        ImageButton logoButton = (ImageButton) findViewById(R.id.logoInicial);
+        TextView pedidoTexto = (TextView) findViewById(R.id.texto);
+        pedidoTexto.setText("PEDIDO "+id);
+
+        TextView adicionar = (TextView) findViewById(R.id.adicionarProduto);
+        adicionar.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                flagsDao.setFlagAdicionarLista();
+                Log.i("FLAGIDPEDIDO", String.valueOf(id));
+                flagsDao.setFlagIdPedido(id);
+                Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagIdPdedido()));
+                Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+                startActivity(i);
             }
-        };
+        });
 
-        registros = dao.listarTodosDoces("Doce");
+        logoButton.setOnClickListener( new View.OnClickListener() {
 
+                                           @Override
+                                           public void onClick(View v) {
+                                               Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                               startActivity(i);
+                                               finish();
+                                           }
+
+                                       }
+        );
+
+        listaDao = new Lista_DAO(getApplicationContext());
+        registros = listaDao.listaProdutos(id);
         mAppList = getPackageManager().getInstalledApplications(0);
-
         mListView = findViewById(R.id.listView);
-
         mAdapter = new AppAdapter();
         mListView.setAdapter(mAdapter);
-
         // step 1. create a MenuCreator
+
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
             @Override
@@ -135,28 +162,26 @@ public class ListaDocesActivity extends Activity {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-//                ApplicationInfo item = mAppList.get(position);
+                ApplicationInfo item = mAppList.get(position);
                 switch (index) {
                     case 0:
-                        // Edit
-                        produtoDoce = mAdapter.getItem(position);
-                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
-                        i.putExtra("Doce", produtoDoce);
-                        startActivity(i);
-                        break;
+//                        // Edit
+//                        Produto doce = mAdapter.getItem(position);
+//                        Intent i = new Intent(getApplicationContext(), CadastroDoceActivity.class);
+//                        i.putExtra("Doce", doce);
+//                        startActivity(i);
+//                        break;
                     case 1:
-                        // delete
-                        DataSource db = new DataSource(getApplicationContext());
-                        produtoDoce = mAdapter.getItem(position);
-                        db.deleteProduto(produtoDoce.getProdutoId_Q(),produtoDoce.getSegmento());
-                        registros.clear();
-                        registros = dao.listarTodosDoces("Doce");
-                        mAdapter = new AppAdapter();
-                        mListView.setAdapter(mAdapter);
-                        runOnUiThread(run);
-                        Toast.makeText(getApplicationContext(), "Doce Deletado com Sucesso!",
-                                Toast.LENGTH_LONG).show();
-                        break;
+//                        // delete
+//                        DataSource db = new DataSource(getApplicationContext());
+//                        Produto produto = mAdapter.getItem(position);
+//                        db.deleteProduto(produto.getProdutoId_Q(),produto.getSegmento());
+//                        mAdapter.notifyDataSetChanged();
+//                        finish();
+//                        startActivity(getIntent());
+//                        Toast.makeText(getApplicationContext(), "Doce Deletado com Sucesso!",
+//                                Toast.LENGTH_LONG).show();
+//                        break;
 
                 }
                 return false;
@@ -197,46 +222,10 @@ public class ListaDocesActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                produtoDoce = mAdapter.getItem(position);
-                Toast.makeText(getApplicationContext(), produtoDoce.getNome() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
-                Log.i("XXXXXXXXX" , "SCHEGOOOOOO1");
-                if(flagsDao.getFlagCadastro() == 2){
-                    SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
-                    Date data = new Date();
-                    String dataFormatada = formataData.format(data);
-                    SimpleDateFormat formataHora = new SimpleDateFormat("hh:mm:ss");
-                    String horaFormatada = formataHora.format(data);
-
-
-                    int idPedido = flagsDao.getFlagIdPdedido();
-                    Log.i("idPedido" , String.valueOf(idPedido));
-                    pedido.setPedidoId_Q(idPedido);
-                    pedido.setDate(dataFormatada);
-                    Log.i("dataPedido" , dataFormatada);
-                    pedido.setHora(horaFormatada);
-                    Log.i("horaPedido" , horaFormatada);
-                    pedidoDao.adicionar(pedido);
-                    listaProdutos.setLista_PedidoId(idPedido);
-                    Log.i("ListaProdNome1" , produtoDoce.getNome());
-                    listaProdutos.setListaProdutoNome(produtoDoce.getNome());
-                    Log.i("ListaProdNome2" , produtoDoce.getNome());
-                    listaProdutos.setLista_PedidoId(produtoDoce.getProdutoId_Q());
-                    listaProdutos.setListaProdutoQuantidade(1);
-                    listaProdutos.setListaData(dataFormatada);
-                    Log.i("ListaProdNome" , "CHEGOOOOUXXXYYYZZ");
-                    listaDao.adicionarItem(listaProdutos);
-                    Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
-                    startActivity(i);
-                    finish();
-
-                }
-
-                mAdapter.getView(position,view,parent);
-                runOnUiThread(run);
+                Toast.makeText(getApplicationContext(), position + " long click", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
-
     }
 
     private void delete(ApplicationInfo item) {
@@ -290,37 +279,16 @@ public class ListaDocesActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
                         R.layout.single_item_doce, null);
-
-                String string2 = String.valueOf(convertView.getTag());
-                Log.i("XXXXXXXXX" , "PRIMEIRA VEZ");
-
                 new ViewHolder(convertView);
             }
-            else{
-                if (convertView.getTag() == "Selecionado"){
-                    Log.i("XXXXXXXXX" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce, null);
-                            new ViewHolder(convertView);
-                }
-                else {
-                    Log.i("YYYYYYYY" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce_selecionado, null);
-                            new ViewHolder(convertView);
-                }
-            }
-
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Produto item = getItem(position);
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
             holder.holder_name.setText(item.getNome());
-            holder.holder_price.setText("R$ "+
-                    String.valueOf(String.format("%.2f", item.getPreco())));
+            holder.holder_price.setText("Qtd "+ item.getQuantidade());
 
 //            holder.holder_name.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -336,7 +304,6 @@ public class ListaDocesActivity extends Activity {
 //            });
             return convertView;
         }
-
 
         class ViewHolder {
             TextView holder_name;
@@ -396,20 +363,9 @@ public class ListaDocesActivity extends Activity {
     }
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
     }
-    @Override
-    public void onResume() {
-        ListaDocesActivity.this.runOnUiThread(new Runnable() {
 
-            @Override
-            public void run() {
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-        super.onResume();
-
-    }
 }

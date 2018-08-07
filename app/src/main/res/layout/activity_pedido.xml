@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/linearLayout5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="8dp"
@@ -25,7 +25,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="16dp"
@@ -38,21 +38,21 @@
         android:layout_weight="1">
 
         <ImageButton
-            android:id="@+id/mesa"
+            android:id="@+id/novo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:background="#00ffffff"
             android:gravity="center"
-            app:srcCompat="@drawable/mesa"/>
+            app:srcCompat="@drawable/novopedidobalcao"/>
         <ImageButton
-            android:id="@+id/balcao"
+            android:id="@+id/emAndamento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp"
             android:background="#00ffffff"
             android:gravity="center"
-            app:srcCompat="@drawable/balcao"/>
+            app:srcCompat="@drawable/emandamentobalcao"/>
 
     </LinearLayout>
 
