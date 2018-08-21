@@ -70,7 +70,7 @@ public class Flags_DAO {
         int flag = cursor.getInt(cursor.getColumnIndex(Flags_DataModel.getFlagCadastro()));
         return flag;
     }
-    public int getFlagIdPdedido(){
+    public int getFlagIdPedido(){
         Cursor cursor = ds.find(Flags_DataModel.getFlagTable(),
                 null, null, null, null, null, null, null);
         cursor.moveToFirst();

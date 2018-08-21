@@ -7,19 +7,29 @@ package com.example.ueno.lefrechie.DataModel;
 public class Pedido_DataModel {
     private static final String PEDIDO_ID = "Pedido_id";
     static final String PEDIDO_TABLE = "TabelaPedidos";
+    static final String PEDIDO_NUM = "PedidoNumero";
     static final String PEDIDO_MESA = "PedidoMesa";
     static final String PEDIDO_BALCAO= "PedidoBalcao";
     static final String PEDIDO_DATA = "PedidoData";
     static final String PEDIDO_HORA = "PedidoHora";
+    static final String PEDIDO_PRODUTOID = "PedidoProdutoId";
+    static final String PEDIDO_PRODUTONOME = "PedidoProdutoNome";
+    static final String PEDIDO_PRODUTOQUANTIDADE = "PedidoProdutoQuantidade";
+    static final String PEDIDO_PRODUTOSTATUS = "PedidoProdutoStatus";
 
 
     public static final String createOrderTable(){
         String query = "CREATE TABLE "+ PEDIDO_TABLE +"("
                 + PEDIDO_ID + " integer primary key autoincrement,"
+                + PEDIDO_NUM + " int,"
                 + PEDIDO_MESA + " int,"
                 + PEDIDO_BALCAO + " int,"
                 + PEDIDO_DATA + " text,"
-                + PEDIDO_HORA + " text"
+                + PEDIDO_HORA + " text,"
+                + PEDIDO_PRODUTOID + " int,"
+                + PEDIDO_PRODUTONOME + " text,"
+                + PEDIDO_PRODUTOQUANTIDADE + " int,"
+                + PEDIDO_PRODUTOSTATUS + " int"
                 +")";
         return query;
     }
@@ -53,4 +63,23 @@ public class Pedido_DataModel {
         return PEDIDO_HORA;
     }
 
+    public static String getPedidoNum() {
+        return PEDIDO_NUM;
+    }
+
+    public static String getPedidoProdutoid() {
+        return PEDIDO_PRODUTOID;
+    }
+
+    public static String getPedidoProdutonome() {
+        return PEDIDO_PRODUTONOME;
+    }
+
+    public static String getPedidoProdutoquantidade() {
+        return PEDIDO_PRODUTOQUANTIDADE;
+    }
+
+    public static String getPedidoProdutostatus() {
+        return PEDIDO_PRODUTOSTATUS;
+    }
 }

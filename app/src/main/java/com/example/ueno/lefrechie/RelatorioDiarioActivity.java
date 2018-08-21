@@ -76,7 +76,7 @@ public class RelatorioDiarioActivity extends Activity {
             }
         };
 
-        registros = pedidoDao.getListaPedidos();
+        registros = pedidoDao.getListaTodosPedidos();
 
         mAppList = getPackageManager().getInstalledApplications(0);
 
@@ -247,11 +247,11 @@ public class RelatorioDiarioActivity extends Activity {
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Pedido item = getItem(position);
             Log.i("1111" , String.valueOf(item.getPedidoId_Q()));
-            Log.i("1111" , String.valueOf(item.getDate()));
+            Log.i("1111" , String.valueOf(item.getData()));
             Log.i("1111" , String.valueOf(item.getHora()));
 
-            holder.holder_id.setText(String.valueOf(item.getPedidoId_Q()));
-            holder.holder_data.setText(String.valueOf(item.getDate()));
+            holder.holder_id.setText(String.valueOf(item.getPedidoId_Q())+"-"+item.getPedidoNum());
+            holder.holder_data.setText(String.valueOf(item.getData()));
             holder.holder_hora.setText(String.valueOf(item.getHora()));
 
             return convertView;

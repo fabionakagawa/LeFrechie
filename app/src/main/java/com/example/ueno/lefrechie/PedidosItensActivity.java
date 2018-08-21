@@ -52,9 +52,10 @@ public class PedidosItensActivity extends Activity {
     String dataFormatada;
     int id;
     private List<ApplicationInfo> mAppList;
-    private List<Produto> registros = new ArrayList<>();
+    private List<Pedido> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
+    Runnable run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,22 +66,30 @@ public class PedidosItensActivity extends Activity {
         flagsDao = new Flags_DAO(getApplicationContext());
         pedidoDao = new Pedido_DAO(getApplicationContext());
 
+        id = flagsDao.getFlagIdPedido();
 
-        if(flagsDao.getFlagIdPdedido()>0){
-            Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagIdPdedido()));
-            id=flagsDao.getFlagIdPdedido();
-        }
-        else{
+        run = new Runnable() {
+            public void run() {
+                //reload content
 
-            SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
-            Date data = new Date();
-            dataFormatada = formataData.format(data);
-            pedido.setDate(dataFormatada);
-            Log.i("AQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
-            id = pedidoDao.getLastOrderId(dataFormatada);
-            Log.i("DEPOISAQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
-            Log.i("DEPOISAQUIAQUI", String.valueOf(id));
-        }
+                mAdapter.notifyDataSetChanged();
+            }
+        };
+//        if(flagsDao.getFlagIdPdedido()>0){
+//            Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagIdPdedido()));
+//            id=flagsDao.getFlagIdPdedido();
+//        }
+//        else{
+//
+//            SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+//            Date data = new Date();
+//            dataFormatada = formataData.format(data);
+//            pedido.setData(dataFormatada);
+//            Log.i("AQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
+//            id = pedidoDao.getLastOrderId(dataFormatada);
+//            Log.i("DEPOISAQUI", String.valueOf(flagsDao.getFlagIdPdedido()));
+//            Log.i("DEPOISAQUIAQUI", String.valueOf(id));
+//        }
 
         ImageButton logoButton = (ImageButton) findViewById(R.id.logoInicial);
         TextView pedidoTexto = (TextView) findViewById(R.id.texto);
@@ -94,7 +103,7 @@ public class PedidosItensActivity extends Activity {
                 flagsDao.setFlagAdicionarLista();
                 Log.i("FLAGIDPEDIDO", String.valueOf(id));
                 flagsDao.setFlagIdPedido(id);
-                Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagIdPdedido()));
+                Log.i("FLAGIDPEDIDO", String.valueOf(flagsDao.getFlagCadastro()));
                 Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
                 startActivity(i);
             }
@@ -112,8 +121,7 @@ public class PedidosItensActivity extends Activity {
                                        }
         );
 
-        listaDao = new Lista_DAO(getApplicationContext());
-        registros = listaDao.listaProdutos(id);
+        registros = pedidoDao.getListaPedidos(id);
         mAppList = getPackageManager().getInstalledApplications(0);
         mListView = findViewById(R.id.listView);
         mAdapter = new AppAdapter();
@@ -173,15 +181,17 @@ public class PedidosItensActivity extends Activity {
 //                        break;
                     case 1:
 //                        // delete
-//                        DataSource db = new DataSource(getApplicationContext());
-//                        Produto produto = mAdapter.getItem(position);
-//                        db.deleteProduto(produto.getProdutoId_Q(),produto.getSegmento());
-//                        mAdapter.notifyDataSetChanged();
-//                        finish();
-//                        startActivity(getIntent());
-//                        Toast.makeText(getApplicationContext(), "Doce Deletado com Sucesso!",
-//                                Toast.LENGTH_LONG).show();
-//                        break;
+                        DataSource db = new DataSource(getApplicationContext());
+                        pedido = mAdapter.getItem(position);
+                        db.deleteItemPedido(pedido.getPedidoNum(),pedido.getPedidoId_Q());
+                        registros.clear();
+                        registros = pedidoDao.getListaPedidos(id);
+                        mAdapter = new AppAdapter();
+                        mListView.setAdapter(mAdapter);
+                        runOnUiThread(run);
+                        Toast.makeText(getApplicationContext(), "Item Deletado com Sucesso!",
+                                Toast.LENGTH_LONG).show();
+                        break;
 
                 }
                 return false;
@@ -268,7 +278,7 @@ public class PedidosItensActivity extends Activity {
         }
 
         @Override
-        public Produto getItem(int position) {
+        public Pedido getItem(int position) {
             return registros.get(position);
         }
 
@@ -285,10 +295,10 @@ public class PedidosItensActivity extends Activity {
                 new ViewHolder(convertView);
             }
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            Produto item = getItem(position);
+            Pedido item = getItem(position);
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
-            holder.holder_name.setText(item.getNome());
-            holder.holder_price.setText("Qtd "+ item.getQuantidade());
+            holder.holder_name.setText(item.getProdutoNome());
+            holder.holder_price.setText("Qtd "+ item.getPedidoId_Q()+ " - "+item.getPedidoNum());
 
 //            holder.holder_name.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -364,8 +374,11 @@ public class PedidosItensActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        int newFlag = flagsDao.getFlagIdPedido()+1;
+        flagsDao.setFlagIdPedido(newFlag);
         startActivity(i);
         finish();
     }
+
 
 }

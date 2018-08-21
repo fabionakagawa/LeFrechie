@@ -116,4 +116,8 @@ public class DataSource extends SQLiteOpenHelper {
         db.delete(Produto_DataModel.getProdutoTable(), Produto_DataModel.getProdutoId() + " = " + produtoId , null);
         Log.i("Update","Produto Deletado com Sucesso");
     }
+    public void deleteItemPedido(int pedidoNum, int pedidoId) {
+        db.delete(Pedido_DataModel.getPedidoTable(), Pedido_DataModel.getPedidoNum() + " = " + pedidoNum + " AND "+Pedido_DataModel.getPedidoId()+ " = "+ pedidoId , null);
+        Log.i("Update","Item Deletado com Sucesso");
+    }
 }

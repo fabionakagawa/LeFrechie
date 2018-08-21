@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 
 import com.example.ueno.lefrechie.DAO.Flags_DAO;
 
+import static java.sql.Types.NULL;
+
 /**
  * Created by Ueno on 3/11/2018.
  */
@@ -41,7 +43,9 @@ public class PedidosActivity extends AppCompatActivity {
 
                                            @Override
                                            public void onClick(View v) {
-                                               flagsDao.setFlagIdPedido(0);
+                                               if(flagsDao.getFlagCadastro() == 0){
+                                                   flagsDao.setFlagIdPedido(1);
+                                               }
                                                Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
                                                startActivity(i);
                                                finish();

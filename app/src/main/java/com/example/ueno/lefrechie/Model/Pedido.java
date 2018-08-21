@@ -12,12 +12,15 @@ import java.util.List;
 public class Pedido implements Serializable {
 
     private int PedidoId_Q;
+    private int pedidoNum;
     private int mesaId_Q;
     private int balcao;
     private String Data;
     private String Hora;
+    private int produtoId;
+    private String produtoNome;
+    private int produtoQuantidade;
     private int status;
-    private int totalPedido;
 
     public int getBalcao() {
         return balcao;
@@ -43,20 +46,8 @@ public class Pedido implements Serializable {
         this.mesaId_Q = mesaId_Q;
     }
 
-    public String getDate() {
-        return Data;
-    }
-
-    public void setDate(String data) {
-        this.Data = data;
-    }
-
     public void setHora(String hora) {
         Hora = hora;
-    }
-
-    public void setTotalPedido(int totalPedido) {
-        this.totalPedido = totalPedido;
     }
 
     public int getPedidoId_Q() {
@@ -73,8 +64,43 @@ public class Pedido implements Serializable {
         return Hora;
     }
 
-    public int getTotalPedido() {
-        return totalPedido;
+    public int getPedidoNum() {
+        return pedidoNum;
     }
 
+    public void setPedidoNum(int pedidoNum) {
+        this.pedidoNum = pedidoNum;
+    }
+
+    public String getData() {
+        return Data;
+    }
+
+    public void setData(String data) {
+        Data = data;
+    }
+
+    public int getProdutoId() {
+        return produtoId;
+    }
+
+    public void setProdutoId(int produtoId) {
+        this.produtoId = produtoId;
+    }
+
+    public String getProdutoNome() {
+        return produtoNome;
+    }
+
+    public void setProdutoNome(String produtoNome) {
+        this.produtoNome = produtoNome;
+    }
+
+    public int getProdutoQuantidade() {
+        return produtoQuantidade;
+    }
+
+    public void setProdutoQuantidade(int produtoQuantidade) {
+        this.produtoQuantidade = produtoQuantidade;
+    }
 }

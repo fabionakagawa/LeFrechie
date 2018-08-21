@@ -208,23 +208,17 @@ public class ListaDocesActivity extends Activity {
                     String horaFormatada = formataHora.format(data);
 
 
-                    int idPedido = flagsDao.getFlagIdPdedido();
+                    int idPedido = flagsDao.getFlagIdPedido();
                     Log.i("idPedido" , String.valueOf(idPedido));
-                    pedido.setPedidoId_Q(idPedido);
-                    pedido.setDate(dataFormatada);
+                    pedido.setPedidoNum(idPedido);
+                    pedido.setData(dataFormatada);
                     Log.i("dataPedido" , dataFormatada);
                     pedido.setHora(horaFormatada);
                     Log.i("horaPedido" , horaFormatada);
+
+                    pedido.setProdutoNome(produtoDoce.getNome());
+                    pedido.setProdutoQuantidade(1);
                     pedidoDao.adicionar(pedido);
-                    listaProdutos.setLista_PedidoId(idPedido);
-                    Log.i("ListaProdNome1" , produtoDoce.getNome());
-                    listaProdutos.setListaProdutoNome(produtoDoce.getNome());
-                    Log.i("ListaProdNome2" , produtoDoce.getNome());
-                    listaProdutos.setLista_PedidoId(produtoDoce.getProdutoId_Q());
-                    listaProdutos.setListaProdutoQuantidade(1);
-                    listaProdutos.setListaData(dataFormatada);
-                    Log.i("ListaProdNome" , "CHEGOOOOUXXXYYYZZ");
-                    listaDao.adicionarItem(listaProdutos);
                     Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
                     startActivity(i);
                     finish();

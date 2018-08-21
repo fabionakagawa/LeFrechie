@@ -32,10 +32,13 @@ public class Pedido_DAO {
         boolean retorno = false;
 
         values = new ContentValues();
-        values.put(Pedido_DataModel.getPedidoId(), obj.getPedidoId_Q());
+        values.put(Pedido_DataModel.getPedidoNum(),obj.getPedidoNum());
+        values.put(Pedido_DataModel.getPedidoProdutonome(),obj.getProdutoNome());
+        values.put(Pedido_DataModel.getPedidoProdutoquantidade(),obj.getProdutoQuantidade());
+        values.put(Pedido_DataModel.getPedidoProdutostatus(), obj.getStatus());
         values.put(Pedido_DataModel.getPedidoMesa(), obj.getMesaId_Q());
         values.put(Pedido_DataModel.getPedidoBalcao(), obj.getBalcao());
-        values.put(Pedido_DataModel.getPedidoData(), obj.getDate());
+        values.put(Pedido_DataModel.getPedidoData(), obj.getData());
         values.put(Pedido_DataModel.getPedidoHora(), obj.getHora());
 
         try {
@@ -63,25 +66,64 @@ public class Pedido_DAO {
         }
     }
 
-    public List<Pedido> getListaPedidos() {
+    public List<Pedido> getListaPedidos(int id) {
         int i;
         List<Pedido> lista = new ArrayList<>();
-        Pedido pedido = new Pedido();
+
+        Cursor cursor = ds.find(Pedido_DataModel.getPedidoTable(),
+                null, Pedido_DataModel.getPedidoNum()+" = "+id,
+                null, null, null, null, null);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            for (i = 0; i < cursor.getCount(); i++) {
+
+                Pedido pedido = new Pedido();
+                
+                pedido.setPedidoId_Q(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoId())));
+                pedido.setPedidoNum(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoNum())));
+                pedido.setData(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoData())));
+                pedido.setHora(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoHora())));
+                pedido.setProdutoId(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutoid())));
+                pedido.setProdutoNome(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutonome())));
+                pedido.setProdutoQuantidade(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutoquantidade())));
+
+                lista.add(pedido);
+
+                cursor.moveToNext();
+            }
+        }
+        return lista;
+    }
+    public List<Pedido> getListaTodosPedidos() {
+        int i;
+        List<Pedido> lista = new ArrayList<>();
+
         Cursor cursor = ds.find(Pedido_DataModel.getPedidoTable(),
                 null, null,
                 null, null, null, null, null);
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             for (i = 0; i < cursor.getCount(); i++) {
+
+                Pedido pedido = new Pedido();
+
                 pedido.setPedidoId_Q(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoId())));
-                pedido.setDate(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoData())));
+                pedido.setPedidoNum(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoNum())));
+                pedido.setData(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoData())));
                 pedido.setHora(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoHora())));
-                lista.add(pedido);
+                pedido.setProdutoId(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutoid())));
+                pedido.setProdutoNome(cursor.getString(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutonome())));
+                pedido.setProdutoQuantidade(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoProdutoquantidade())));
+                Log.i("PedidoId" , String.valueOf(cursor.getInt(cursor.getColumnIndex(Pedido_DataModel.getPedidoId()))));
+                Log.i("PedidoIdXXXXXXXXXX" , String.valueOf(pedido.getPedidoId_Q()));
+                lista.add(i,pedido);
+                Log.i("PedidoIdYYYYYYYYY" , String.valueOf(lista.get(i).getPedidoId_Q()));
+                Log.i("CursorId" , String.valueOf(cursor.getPosition()));
                 cursor.moveToNext();
+                Log.i("CursorId2" , String.valueOf(cursor.getPosition()));
             }
         }
         return lista;
     }
-
 }
 
