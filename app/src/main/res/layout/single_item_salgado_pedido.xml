@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+    android:background="#00ffffff"
+    android:orientation="horizontal"
+    android:weightSum="26"
+    android:gravity="top"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/nomeProduto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/salgadonome"
+        android:textColorHint="#ffffff"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        />
+
+    <Button
+        android:id="@+id/removeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="12"
+        android:background="@drawable/ic_removebuttoncircleblack"
+        android:gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/quantidadeProduto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorHint="#000000"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="12"
+        android:background="@drawable/ic_addbuttoncircleblack"
+        android:gravity="center_vertical"/>
+
+</LinearLayout>

@@ -60,6 +60,7 @@
         android:layout_height="match_parent"
         android:background="#00000000"
         android:paddingTop="2dp"
+        android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_weight="8">
 
@@ -75,6 +76,17 @@
             android:textSize="@dimen/font_size"
             android:textColor= "@color/White"
             android:background="@drawable/main"/>
+        <TextView
+            android:id="@+id/valorPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:fontFamily="@font/calibri"
+            android:textSize="@dimen/font_size"
+            android:textColor= "@color/colorBlack"/>
     </LinearLayout>
    </LinearLayout>
 

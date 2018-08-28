@@ -53,13 +53,10 @@ public class ListaDocesActivity extends Activity {
     private List<Produto> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
-    private int flagSelected;
     private Produto produtoDoce;
     private Pedido pedido;
     private Pedido_DAO pedidoDao;
     private Flags_DAO flagsDao;
-    private ListaProdutos listaProdutos;
-    private Lista_DAO listaDao;
     Runnable run;
 
 
@@ -70,11 +67,11 @@ public class ListaDocesActivity extends Activity {
 
         dao = new ProdutoDAO(getApplicationContext());
         pedidoDao = new Pedido_DAO(getApplicationContext());
-        listaDao = new Lista_DAO(getApplicationContext());
         flagsDao = new Flags_DAO(getApplicationContext());
+        produtoDoce = new Produto();
         pedido = new Pedido();
-        listaProdutos = new ListaProdutos();
 
+        //Para atualizar a lista, temos que rodar o notify na thread do UI
         run = new Runnable() {
             public void run() {
                 //reload content
@@ -199,7 +196,6 @@ public class ListaDocesActivity extends Activity {
                                            int position, long id) {
                 produtoDoce = mAdapter.getItem(position);
                 Toast.makeText(getApplicationContext(), produtoDoce.getNome() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
-                Log.i("XXXXXXXXX" , "SCHEGOOOOOO1");
                 if(flagsDao.getFlagCadastro() == 2){
                     SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
                     Date data = new Date();
@@ -209,14 +205,13 @@ public class ListaDocesActivity extends Activity {
 
 
                     int idPedido = flagsDao.getFlagIdPedido();
-                    Log.i("idPedido" , String.valueOf(idPedido));
                     pedido.setPedidoNum(idPedido);
                     pedido.setData(dataFormatada);
-                    Log.i("dataPedido" , dataFormatada);
                     pedido.setHora(horaFormatada);
-                    Log.i("horaPedido" , horaFormatada);
 
                     pedido.setProdutoNome(produtoDoce.getNome());
+                    pedido.setProdutoId(produtoDoce.getProdutoId_Q());
+                    Log.i("ProdutoID", String.valueOf(produtoDoce.getProdutoId_Q()));
                     pedido.setProdutoQuantidade(1);
                     pedidoDao.adicionar(pedido);
                     Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
@@ -288,27 +283,12 @@ public class ListaDocesActivity extends Activity {
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
                         R.layout.single_item_doce, null);
-
-                String string2 = String.valueOf(convertView.getTag());
                 Log.i("XXXXXXXXX" , "PRIMEIRA VEZ");
 
                 new ViewHolder(convertView);
             }
-            else{
-                if (convertView.getTag() == "Selecionado"){
-                    Log.i("XXXXXXXXX" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce, null);
-                            new ViewHolder(convertView);
-                }
-                else {
-                    Log.i("YYYYYYYY" , "SEGUNDA VEZ");
-                    convertView = View.inflate(getApplicationContext(),
-                            R.layout.single_item_doce_selecionado, null);
-                            new ViewHolder(convertView);
-                }
-            }
 
+            new ViewHolder(convertView);
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Produto item = getItem(position);
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));

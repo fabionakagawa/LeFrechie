@@ -216,4 +216,17 @@ public class ProdutoDAO {
         }
         return obj;
     }
+    public float retornaProdutoValor(int id) {
+        float valor=0;
+        Cursor cursor = ds.find(Produto_DataModel.getProdutoTable(),
+                null, Produto_DataModel.getProdutoId()+" = "+id, null, null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+
+            cursor.moveToFirst();
+            valor = cursor.getFloat(cursor.getColumnIndex(Produto_DataModel.getProdutoPreco()));
+
+        }
+        return valor;
+    }
 }

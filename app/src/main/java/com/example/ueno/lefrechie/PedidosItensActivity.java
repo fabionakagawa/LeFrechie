@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,10 +52,16 @@ public class PedidosItensActivity extends Activity {
     ListaProdutos listaProdutos = new ListaProdutos();
     String dataFormatada;
     int id;
+    float valor;
+    private DataSource db;
+    private int quantidadeProduto;
     private List<ApplicationInfo> mAppList;
     private List<Pedido> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
+    private TextView pedidoValor;
+    private TextView pedidoTexto;
+    private ImageButton logoButton;
     Runnable run;
 
     @Override
@@ -62,7 +69,7 @@ public class PedidosItensActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pedidos_items);
 
-
+        db = new DataSource(getApplicationContext());
         flagsDao = new Flags_DAO(getApplicationContext());
         pedidoDao = new Pedido_DAO(getApplicationContext());
 
@@ -71,7 +78,8 @@ public class PedidosItensActivity extends Activity {
         run = new Runnable() {
             public void run() {
                 //reload content
-
+                valor = pedidoDao.calculaTotal(id,getApplicationContext());
+                pedidoValor.setText("Total: R$"+String.valueOf(String.format("%.2f", valor)));
                 mAdapter.notifyDataSetChanged();
             }
         };
@@ -91,9 +99,13 @@ public class PedidosItensActivity extends Activity {
 //            Log.i("DEPOISAQUIAQUI", String.valueOf(id));
 //        }
 
-        ImageButton logoButton = (ImageButton) findViewById(R.id.logoInicial);
-        TextView pedidoTexto = (TextView) findViewById(R.id.texto);
+        logoButton = (ImageButton) findViewById(R.id.logoInicial);
+        pedidoTexto = (TextView) findViewById(R.id.texto);
+        pedidoValor = (TextView) findViewById(R.id.valorPedido);
+        valor = pedidoDao.calculaTotal(id,getApplicationContext());
+        pedidoValor.setText("Total: R$"+valor);
         pedidoTexto.setText("PEDIDO "+id);
+
 
         TextView adicionar = (TextView) findViewById(R.id.adicionarProduto);
         adicionar.setOnClickListener( new View.OnClickListener() {
@@ -181,7 +193,6 @@ public class PedidosItensActivity extends Activity {
 //                        break;
                     case 1:
 //                        // delete
-                        DataSource db = new DataSource(getApplicationContext());
                         pedido = mAdapter.getItem(position);
                         db.deleteItemPedido(pedido.getPedidoNum(),pedido.getPedidoId_Q());
                         registros.clear();
@@ -291,14 +302,17 @@ public class PedidosItensActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
-                        R.layout.single_item_doce, null);
+                        R.layout.single_item_salgado_pedido, null);
                 new ViewHolder(convertView);
             }
+            final Pedido item = getItem(position);
+            quantidadeProduto = item.getProdutoQuantidade();
+            new ViewHolder(convertView);
             ViewHolder holder = (ViewHolder) convertView.getTag();
-            Pedido item = getItem(position);
+
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
             holder.holder_name.setText(item.getProdutoNome());
-            holder.holder_price.setText("Qtd "+ item.getPedidoId_Q()+ " - "+item.getPedidoNum());
+            holder.holder_price.setText(" "+ item.getProdutoQuantidade()+" ");
 
 //            holder.holder_name.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -312,26 +326,70 @@ public class PedidosItensActivity extends Activity {
 //                    Toast.makeText(ListaDocesActivity.this,"iv_icon_click",Toast.LENGTH_SHORT).show();
 //                }
 //            });
+            holder.holder_remove.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    if(item.getProdutoQuantidade()>1){
+                        pedidoDao.remover(item);
+                        registros.clear();
+                        registros = pedidoDao.getListaPedidos(id);
+                        mAdapter = new AppAdapter();
+                        mListView.setAdapter(mAdapter);
+                        runOnUiThread(run);
+                    }
+                    else{
+                        db.deleteItemPedido(item.getPedidoNum(),item.getPedidoId_Q());
+                        registros.clear();
+                        registros = pedidoDao.getListaPedidos(id);
+                        mAdapter = new AppAdapter();
+                        mListView.setAdapter(mAdapter);
+                        runOnUiThread(run);
+                    }
+                }
+            });
+            holder.holder_add.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View arg0) {
+                    item.setProdutoQuantidade(1);
+                    pedidoDao.adicionar(item);
+                    registros.clear();
+                    registros = pedidoDao.getListaPedidos(id);
+                    mAdapter = new AppAdapter();
+                    mListView.setAdapter(mAdapter);
+                    runOnUiThread(run);
+                }
+            });
             return convertView;
         }
 
         class ViewHolder {
             TextView holder_name;
             TextView holder_price;
+            Button holder_remove;
+            Button holder_add;
 //            ImageView iv_icon;
 //            TextView tv_name;
 
             public ViewHolder(View view) {
-                holder_name = view.findViewById(R.id.nomeDoce);
-                holder_price = view.findViewById(R.id.precoDoce);
+                holder_name = view.findViewById(R.id.nomeProduto);
+                holder_price = view.findViewById(R.id.quantidadeProduto);
+                holder_remove = view.findViewById(R.id.removeButton);
+                holder_add = view.findViewById(R.id.addButton);
 //                iv_icon = (ImageView) view.findViewById(R.id.iv_icon);
 //                tv_name = (TextView) view.findViewById(R.id.tv_name);
                 holder_name.setTypeface(null, Typeface.BOLD);
                 holder_name.setTextSize(TypedValue.COMPLEX_UNIT_PX,65);
                 holder_name.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 holder_price.setTypeface(null, Typeface.BOLD);
-                holder_price.setTextSize(TypedValue.COMPLEX_UNIT_PX,55);
+                holder_price.setTextSize(TypedValue.COMPLEX_UNIT_PX,100);
                 holder_price.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                if(quantidadeProduto == 1){
+                    holder_remove.setBackgroundResource(R.drawable.ic_removebuttoncirclewhite);
+                }
+                else
+                    holder_remove.setBackgroundResource(R.drawable.ic_removebuttoncircleblack);
                 view.setTag(this);
             }
         }

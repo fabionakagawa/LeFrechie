@@ -22,17 +22,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ueno.lefrechie.DAO.Flags_DAO;
+import com.example.ueno.lefrechie.DAO.Pedido_DAO;
 import com.example.ueno.lefrechie.DAO.ProdutoDAO;
 import com.example.ueno.lefrechie.DataSource.DataSource;
 import com.example.ueno.lefrechie.Libs.BaseSwipListAdapter;
-import com.example.ueno.lefrechie.Libs.ListViewCustomAdapter;
 import com.example.ueno.lefrechie.Libs.SwipeMenu;
 import com.example.ueno.lefrechie.Libs.SwipeMenuCreator;
 import com.example.ueno.lefrechie.Libs.SwipeMenuItem;
 import com.example.ueno.lefrechie.Libs.SwipeMenuListView;
+import com.example.ueno.lefrechie.Model.Pedido;
 import com.example.ueno.lefrechie.Model.Produto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,6 +51,11 @@ public class ListaPetiscosActivity extends Activity{
     private List<Produto> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
+    private Produto produtoPetisco;
+    private Pedido pedido;
+    private Pedido_DAO pedidoDao;
+    private Flags_DAO flagsDao;
+    Runnable run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +63,24 @@ public class ListaPetiscosActivity extends Activity{
         setContentView(R.layout.activity_lista_petisco);
 
         dao = new ProdutoDAO(getApplicationContext());
+        pedidoDao = new Pedido_DAO(getApplicationContext());
+        flagsDao = new Flags_DAO(getApplicationContext());
+        produtoPetisco = new Produto();
+        pedido = new Pedido();
+
+        //Para atualizar a lista, temos que rodar o notify na thread do UI
+        run = new Runnable() {
+            public void run() {
+                //reload content
+
+                mAdapter.notifyDataSetChanged();
+            }
+        };
 
 
         registros = dao.listarTodosPetiscos("Petisco");
-
         mAppList = getPackageManager().getInstalledApplications(0);
-
         mListView = findViewById(R.id.listView);
-
         mAdapter = new AppAdapter();
         mListView.setAdapter(mAdapter);
 
@@ -112,19 +131,21 @@ public class ListaPetiscosActivity extends Activity{
                 switch (index) {
                     case 0:
                         // Edit
-                        Produto petisco = mAdapter.getItem(position);
+                        produtoPetisco = mAdapter.getItem(position);
                         Intent i = new Intent(getApplicationContext(), CadastroPetiscoActivity.class);
-                        i.putExtra("Petisco", petisco);
+                        i.putExtra("Petisco", produtoPetisco);
                         startActivity(i);
                         break;
                     case 1:
                         // delete
                         DataSource db = new DataSource(getApplicationContext());
-                        Produto produto = mAdapter.getItem(position);
-                        db.deleteProduto(produto.getProdutoId_Q(), produto.getSegmento());
-                        mAdapter.notifyDataSetChanged();
-                        finish();
-                        startActivity(getIntent());
+                        produtoPetisco = mAdapter.getItem(position);
+                        db.deleteProduto(produtoPetisco.getProdutoId_Q(), produtoPetisco.getSegmento());
+                        registros.clear();
+                        registros = dao.listarTodasBebidas("Bebida");
+                        mAdapter = new AppAdapter();
+                        mListView.setAdapter(mAdapter);
+                        runOnUiThread(run);
                         Toast.makeText(getApplicationContext(), "Petisco Deletado com Sucesso!",
                                 Toast.LENGTH_LONG).show();
                         break;
@@ -168,7 +189,33 @@ public class ListaPetiscosActivity extends Activity{
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                Toast.makeText(getApplicationContext(), position + " long click", Toast.LENGTH_SHORT).show();
+                produtoPetisco = mAdapter.getItem(position);
+                Toast.makeText(getApplicationContext(), produtoPetisco.getNome() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
+                if (flagsDao.getFlagCadastro() == 2) {
+                    SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+                    Date data = new Date();
+                    String dataFormatada = formataData.format(data);
+                    SimpleDateFormat formataHora = new SimpleDateFormat("hh:mm:ss");
+                    String horaFormatada = formataHora.format(data);
+
+
+                    int idPedido = flagsDao.getFlagIdPedido();
+                    pedido.setPedidoNum(idPedido);
+                    pedido.setData(dataFormatada);
+                    pedido.setHora(horaFormatada);
+
+                    pedido.setProdutoNome(produtoPetisco.getNome());
+                    pedido.setProdutoId(produtoPetisco.getProdutoId_Q());
+                    pedido.setProdutoQuantidade(1);
+                    pedidoDao.adicionar(pedido);
+                    Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }
+
+                mAdapter.getView(position, view, parent);
+                runOnUiThread(run);
                 return false;
             }
         });
@@ -231,6 +278,8 @@ public class ListaPetiscosActivity extends Activity{
                         R.layout.single_item_petisco, null);
                 new ViewHolder(convertView);
             }
+
+            new ViewHolder(convertView);
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Produto item = getItem(position);
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
@@ -314,5 +363,16 @@ public class ListaPetiscosActivity extends Activity{
         Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
         startActivity(i);
         finish();
+    }
+    @Override
+    public void onResume() {
+        ListaPetiscosActivity.this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+        super.onResume();
     }
 }

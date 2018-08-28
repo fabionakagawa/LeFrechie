@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ueno.lefrechie.DAO.Flags_DAO;
+import com.example.ueno.lefrechie.DAO.Pedido_DAO;
 import com.example.ueno.lefrechie.DAO.ProdutoDAO;
 import com.example.ueno.lefrechie.DataSource.DataSource;
 import com.example.ueno.lefrechie.Libs.BaseSwipListAdapter;
@@ -29,9 +32,12 @@ import com.example.ueno.lefrechie.Libs.SwipeMenu;
 import com.example.ueno.lefrechie.Libs.SwipeMenuCreator;
 import com.example.ueno.lefrechie.Libs.SwipeMenuItem;
 import com.example.ueno.lefrechie.Libs.SwipeMenuListView;
+import com.example.ueno.lefrechie.Model.Pedido;
 import com.example.ueno.lefrechie.Model.Produto;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +52,11 @@ public class ListaCafesActivity extends Activity {
     private List<Produto> registros = new ArrayList<>();
     private AppAdapter mAdapter;
     private SwipeMenuListView mListView;
+    private Produto produtoCafe;
+    private Pedido pedido;
+    private Pedido_DAO pedidoDao;
+    private Flags_DAO flagsDao;
+    Runnable run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +64,23 @@ public class ListaCafesActivity extends Activity {
         setContentView(R.layout.activity_lista_cafe);
 
         dao = new ProdutoDAO(getApplicationContext());
+        pedidoDao = new Pedido_DAO(getApplicationContext());
+        flagsDao = new Flags_DAO(getApplicationContext());
+        produtoCafe = new Produto();
+        pedido = new Pedido();
 
+        //Para atualizar a lista, temos que rodar o notify na thread do UI
+        run = new Runnable() {
+            public void run() {
+                //reload content
+
+                mAdapter.notifyDataSetChanged();
+            }
+        };
 
         registros = dao.listarTodosCafes("Cafe");
-
         mAppList = getPackageManager().getInstalledApplications(0);
-
         mListView = findViewById(R.id.listView);
-
         mAdapter = new AppAdapter();
         mListView.setAdapter(mAdapter);
 
@@ -111,19 +131,21 @@ public class ListaCafesActivity extends Activity {
                 switch (index) {
                     case 0:
                         // Edit
-                        Produto cafe = mAdapter.getItem(position);
+                        produtoCafe = mAdapter.getItem(position);
                         Intent i = new Intent(getApplicationContext(), CadastroCafeActivity.class);
-                        i.putExtra("Cafe", cafe);
+                        i.putExtra("Cafe", produtoCafe);
                         startActivity(i);
                         break;
                     case 1:
                         // delete
                         DataSource db = new DataSource(getApplicationContext());
-                        Produto produto = mAdapter.getItem(position);
-                        db.deleteProduto(produto.getProdutoId_Q(), produto.getSegmento());
-                        mAdapter.notifyDataSetChanged();
-                        finish();
-                        startActivity(getIntent());
+                        produtoCafe = mAdapter.getItem(position);
+                        db.deleteProduto(produtoCafe.getProdutoId_Q(), produtoCafe.getSegmento());
+                        registros.clear();
+                        registros = dao.listarTodosCafes("Cafe");
+                        mAdapter = new AppAdapter();
+                        mListView.setAdapter(mAdapter);
+                        runOnUiThread(run);
                         Toast.makeText(getApplicationContext(), "Café Deletado com Sucesso!",
                                 Toast.LENGTH_LONG).show();
                         break;
@@ -167,10 +189,37 @@ public class ListaCafesActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                Toast.makeText(getApplicationContext(), position + " long click", Toast.LENGTH_SHORT).show();
+                produtoCafe = mAdapter.getItem(position);
+                Toast.makeText(getApplicationContext(), produtoCafe.getNome() + " Adicionado à Lista", Toast.LENGTH_SHORT).show();
+                if (flagsDao.getFlagCadastro() == 2) {
+                    SimpleDateFormat formataData = new SimpleDateFormat("dd-MM-yyyy");
+                    Date data = new Date();
+                    String dataFormatada = formataData.format(data);
+                    SimpleDateFormat formataHora = new SimpleDateFormat("hh:mm:ss");
+                    String horaFormatada = formataHora.format(data);
+
+
+                    int idPedido = flagsDao.getFlagIdPedido();
+                    pedido.setPedidoNum(idPedido);
+                    pedido.setData(dataFormatada);
+                    pedido.setHora(horaFormatada);
+
+                    pedido.setProdutoNome(produtoCafe.getNome());
+                    pedido.setProdutoId(produtoCafe.getProdutoId_Q());
+                    pedido.setProdutoQuantidade(1);
+                    pedidoDao.adicionar(pedido);
+                    Intent i = new Intent(getApplicationContext(), PedidosItensActivity.class);
+                    startActivity(i);
+                    finish();
+
+                }
+
+                mAdapter.getView(position, view, parent);
+                runOnUiThread(run);
                 return false;
             }
         });
+
 
     }
 
@@ -228,8 +277,12 @@ public class ListaCafesActivity extends Activity {
             if (convertView == null) {
                 convertView = View.inflate(getApplicationContext(),
                         R.layout.single_item_cafe, null);
+                Log.i("XXXXXXXXX" , "PRIMEIRA VEZ");
+
                 new ViewHolder(convertView);
             }
+
+            new ViewHolder(convertView);
             ViewHolder holder = (ViewHolder) convertView.getTag();
             Produto item = getItem(position);
 //            holder.iv_icon.setImageDrawable(item.loadIcon(getPackageManager()));
@@ -308,10 +361,23 @@ public class ListaCafesActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onBackPressed() {
         Intent i = new Intent(getApplicationContext(), CadastroSegmentoProdutoActivity.class);
         startActivity(i);
         finish();
+    }
+
+    @Override
+    public void onResume() {
+        ListaCafesActivity.this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+        super.onResume();
     }
 }
